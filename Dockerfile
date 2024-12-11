@@ -1,18 +1,26 @@
-FROM alpine:3.20
+# Use an official node image as the base image
+FROM node:22.12-alpine
 
-ENV NODE_VERSION 22.12.0
-
+# Set the working directory in the container
 WORKDIR /app
 
-COPY package*.json .
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
+# Install the dependencies
 RUN npm install
 
+# Copy the rest of the application code to the container
 COPY . .
 
-EXPOSE 3000
+# Build the React application
+RUN npm run build
 
-CMD ["npm","run","dev"]
+# Install a simple static file server to serve the React app
+RUN npm install -g serve
 
+# Set the command to run the application
+CMD ["npm", "run", "dev"]
 
-
+# Expose port 3000
+EXPOSE 5173
